@@ -1,0 +1,62 @@
+###EJERCICIO
+#Generar 3 secuencias que generen los siguientes datos
+#1) 1000 datos que se generen de 3 en 3 y pedir a R el dato 300 del vector generado
+#2)450 datos que su secuencia sea de 50 en 50, pedir a R el dato 10
+#3)2000 datos que se secuencia sea de .3 en .3, pedir los datos 3, 15, 800 y 1999
+
+sec1<-seq(from=0,length=1000,by=3)
+sec1[300]
+
+sec2<-seq(from=0,length=450,by=50)
+sec2[10]
+
+sec3<-seq(from=0,length=2000,by=.3)
+sec3[c(3,15,800,1999)]
+
+
+###EJERCICIO Datos aleatorios
+#1)suponemos una empresa que quiere estimar una pensión para sus trabajadores con base en
+#la antiguedad, por lo que se requiere estimar una muestra de 500 trabajadores y que sus rangos
+#de antiguedad sean desde 0 hasta 30 años, pedir a R el ultimo dato de esta muestra
+#2)generar una muestra de 50000 datos que tengan un rango de 0 hasta 100000
+#3)generar una muestra de 50 datos que tengan un rango de 10 a 19, pedir a R los datos 34,43 y 49
+
+trab<-sample(0:30,500,replace=TRUE)
+trab[500]
+
+muestra<-sample(0:100000,50000)
+View(muestra)
+mues<-data.frame(sample(0:100000,50000))
+View(mues)
+
+muestra2<-sample(10:19,50,replace=TRUE)
+muestra2[c(34,43,49)]
+
+
+####MATRICES###
+(e<-1:10) #generar vector
+dim(e)<-c(2,5)    #hacer matriz de 2 renglones y 5 columnas
+View(e)
+class(e)
+
+dim(e)<-c(5,2)   #hacer matriz de 5 renglones y 2 columnas
+e[5,2]
+e[,2]           #muestra todos los datos en la columna 2
+e[2,]           #muestra todos los datos del renglón 2
+
+
+m<-matrix(110:119,nrow=5,ncol=2,byrow=FALSE) #valores, nrenglon, ncolumna, llena por renglon o por columna(por default columna)
+View(m)
+ma<-matrix(1:10,nrow=5,ncol=2)
+View(ma)
+
+rownames(ma)<-c("manzana","naranja","piña","melon","mango")###poner nombres a los renglones de una matriz
+colnames(ma)<-c("mercado1","mercado2") ###poner nombres a los renglones de una matriz
+ma["manzana","mercado2"]
+View(ma)
+
+mat<-rbind(1:2,3:4,c(5,6))
+mat
+
+mat2<-cbind(1:2,3:4,c(2,3), 9:8)
+mat2
