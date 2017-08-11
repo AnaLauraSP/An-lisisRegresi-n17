@@ -1,0 +1,24 @@
+### EJERCICIO MATRICES###
+
+#1) Crear una matriz con la funciÓn dim() de 5 renglones y 4 columnas,
+#esta matriz esta basada en un vector que contiene estos datos 11:31 
+#Nombre de los renglones (toluca, pachuca, gdl, mty)
+#Nombre de las columnas es (escuela1, escuela2, escuela3, escuela4, escuela5)
+#Incorporar el nombre a los renglones y columnas de la matriz
+#Identificar el dato de la escuela 3 de toluca, de la escuela 5 de gdl y la escuela 1 de pachuca
+
+num<-11:30          #Al utilizar 11:31 son 21 datos que no coinciden con con la dimensión
+dim(num)<-c(4,5)    #La primer indicación de renglones y columnas no coincidia con los nombres proporcionados
+View(num)  
+rownames(num)<-c("Toluca","Pachuca","Guadalajara","Monterrey")
+colnames(num)<-c("Escuela1","Escuela2","Escuela3","Escuela4","Escuela5")
+num["Toluca","Escuela3"]
+num["Guadalajara","Escuela5"]
+num["Pachuca","Escuela1"]
+
+
+#2) crear con la función matrix una matriz de 6 renglones y 3 columnas
+#Preguntar por el dato de la matriz en el renglón 3 y columna 3
+
+matriz<-matrix(1:18,nrow=6,ncol=3,byrow=TRUE)
+matriz[3,3]
