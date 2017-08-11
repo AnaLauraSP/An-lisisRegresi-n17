@@ -1,0 +1,58 @@
+##para pegar un renglón a la matriz se puede usar rbind y cbind
+
+matriz<-11:30          
+dim(matriz)<-c(4,5)    
+View(matriz)  
+rownames(matriz)<-c("Toluca","Pachuca","Guadalajara","Monterrey")
+colnames(matriz)<-c("Escuela1","Escuela2","Escuela3","Escuela4","Escuela5")
+
+matriz<-rbind(matriz,c(4,5,6,7,8))
+matriz
+rownames(matriz)<-c("Toluca","Pachuca","Guadalajara","Monterrey","Xalapa")
+
+matriz<-cbind(matriz,c(4,5,6,7))
+colnames(matriz)<-c("Escuela1","Escuela2","Escuela3","Escuela4","Escuela5","Escuela6")
+
+matriz["Pachuca","Escuela3"]<-50 #asignar valor a una posición específica
+edit(matriz)   #modificar directamente los datos ESTÁ CHIDO
+
+#para multiplicar matrices j%*%i
+#para transpuesta de una matriz se utiliza t 
+j<-matrix(1:18,6,3)
+t(j)
+
+#############DATA FRAME###########
+nombres<-c("Sergio","Juan","Rocio","Jessica")
+edad<-c(30,43,21,18)
+altura<-c(170,165,175,172)
+salario<-c(3000,4500,2200,4300)
+base<-data.frame(nombres,edad,altura,salario) #dentro del paréntesis van nombres de variables
+
+base[4,3]<-178
+View(base)
+
+base$salario*2.2 ->base$salario  #para dar ruta base$salario=BD$variable
+peso<-c(83.2,75.2,69.3,70.5) #crear nueva variable
+base<-data.frame(nombres,edad,altura,salario,peso)
+base$peso<-base$peso*1.2
+
+round(base$peso,1)->base$peso
+base$escolaridad<-c("prepa","lic","ninguno","prim") #añadir variable a la BD
+base$sexo<-c(1,1,2,2)   #1=hombre, 2=mujer
+table(base$sexo) #tabla,frecuencia en una variable
+
+attach(base)   #la función attach sirve para indicar que se va a trabajar solo sobre esa base
+
+detach(base)   #inverso a attach
+
+
+
+#installar paqueterias de internet
+install.packages("foreign") #exportar o importar BD
+install.packages("questionr") #expandir frecuencias de BD muestrales
+install.packages("car")      #es para regresion
+
+#para mandar llamar se usa library() o require()
+require(foreign)
+require(questionr)
+library(car)
