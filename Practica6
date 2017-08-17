@@ -1,0 +1,31 @@
+temporal<-tempfile()  ###descargar archivos de internet "ruta corta"
+download.file("http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/modulos/mti/2015/microdatos/mti2015_bases_conapo_dbf.zip", temporal)
+files<-unzip(temporal,list=TRUE)$Name
+unzip(temporal,files=files[grepl("dbf",files)])
+library(foreign)
+files
+mti2015<- data.frame(read.dbf("mti2015_05_17_sdem_precodificado.DBF"))
+View(mti2015)
+
+
+###etiquetar variables
+table(mti2015$CS_P15)
+mti2015$CS_P15<-factor(mti2015$CS_P15,levels = c(1,2,3,4),labels = c("Primaria","Secundaria","Preparatoria","No sabe"))
+
+mti2015$RAMA1<-factor(mti2015$RAMA,levels = c(1,2,3,4,5,6,7),labels = c("Agropecuario","Construccion","Industria manufacturera","Comercio","Servicios","Otros","No especificado"))
+table(mti2015$RAMA)
+table(mti2015$RAMA1)
+mti2015$RAMAN<-as.numeric(mti2015$RAMA)
+##recodificar variable
+mti2015$RAMA2[mti2015$RAMAN==1]<-1
+mti2015$RAMA2[mti2015$RAMAN==2]<-2
+mti2015$RAMA2[mti2015$RAMAN==3]<-2
+mti2015$RAMA2[mti2015$RAMAN==4]<-3
+mti2015$RAMA2[mti2015$RAMAN==5]<-3
+mti2015$RAMA2[mti2015$RAMAN==6]<-4
+mti2015$RAMA2[mti2015$RAMAN==7]<-4
+
+table(mti2015$RAMA2)
+
+mti2015$RAMA3<-factor(mti2015$RAMA2,levels = c(1,2,3,4),labels = c("Primario","Secundario","Terciario","No especificado"))
+table(RAMA3)
