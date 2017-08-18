@@ -1,0 +1,59 @@
+####RECODIFICAR
+
+temporal<-tempfile()  ###descargar archivos de internet "ruta corta"
+download.file("http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/modulos/mti/2015/microdatos/mti2015_bases_conapo_dbf.zip", temporal)
+files<-unzip(temporal,list=TRUE)$Name
+unzip(temporal,files=files[grepl("dbf",files)])
+library(foreign)
+files
+mti2015<- data.frame(read.dbf("mti2015_05_17_sdem_precodificado.DBF"))
+View(mti2015)
+
+mti2015$RAMA2[mti2015$RAMA==1]<-1  #recodificar
+mti2015$RAMA2[mti2015$RAMA==2 | mti2015$RAMA==3]<-2
+mti2015$RAMA2[mti2015$RAMA==4 | mti2015$RAMA==5]<-3
+mti2015$RAMA2[mti2015$RAMA==6 | mti2015$RAMA==7]<-4
+
+
+table(mti2015$RAMA2)
+
+mti2015$RAMA2<-factor(mti2015$RAMA2,levels = c(1,2,3,4),labels = c("Primario","Secundario","Terciario","No especificado"))
+table(mti2015$RAMA2)
+
+
+####EJERCICIO
+#Recodificar la variable EDA en una nueva variable que se llame GPOEDA y etiquetarla
+#Esta recodificación debe quedar en 4 lineas del script
+#la recodificación es la siguiente
+#5,6,7    - 1 - niñ@
+#8,9,10,11- 2 - Pre ado
+#12,13,14 - 3 - ado
+#15,16,17 - 4 - joven
+#generar una tabla con datos expandidos y exportarla a excel
+
+
+mti2015$GPOEDA[mti2015$EDA=="05" | mti2015$EDA=="06" | mti2015$EDA=="07"]<-1
+mti2015$GPOEDA[mti2015$EDA=="08" | mti2015$EDA=="09" | mti2015$EDA=="10" | mti2015$EDA=="11"]<-2
+mti2015$GPOEDA[mti2015$EDA=="12" | mti2015$EDA=="13" | mti2015$EDA=="14"]<-3
+mti2015$GPOEDA[mti2015$EDA=="15" | mti2015$EDA=="16" | mti2015$EDA=="17"]<-4
+
+mti2015$EDA<-as.character(mti2015$EDA)
+mti2015$EDA<-as.numeric(mti2015$EDA)
+mti2015$GPOEDA[mti2015$EDA>=5 & mti2015$EDA<=7]<-1
+mti2015$GPOEDA[mti2015$EDA>=8 & mti2015$EDA<=11]<-2
+mti2015$GPOEDA[mti2015$EDA>=12 & mti2015$EDA<=14]<-3
+mti2015$GPOEDA[mti2015$EDA>=15 & mti2015$EDA<=17]<-4
+
+table(mti2015$GPOEDA)
+
+mti2015$GPOEDA<-factor(mti2015$GPOEDA,levels = c(1,2,3,4),labels = c("Niñ@s","Pre-ado","Ado","Joven"))
+
+require(questionr)
+tabla<-wtd.table(mti2015$GPOEDA, weights= mti2015$FAC_MTI)
+tabla
+#install.packages('WriteXLS')
+#require(WriteXLS)
+#help(WriteXLS)
+#WriteXLS(mti2015,"TABLA.xlsx")
+
+write.csv(tabla, file="TablaR.csv")
