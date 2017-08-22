@@ -1,0 +1,46 @@
+temporal<-tempfile()  ###descargar archivos de internet "ruta corta"
+download.file("http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/modulos/mti/2015/microdatos/mti2015_bases_conapo_dbf.zip", temporal)
+files<-unzip(temporal,list=TRUE)$Name
+unzip(temporal,files=files[grepl("dbf",files)])
+install.packages("foreign")
+library(foreign)
+files
+mti2015<- data.frame(read.dbf("mti2015_05_17_sdem_precodificado.DBF"))
+View(mti2015)
+
+mti2015$EDA<-as.character(mti2015$EDA)
+mti2015$EDA<-as.numeric(mti2015$EDA)
+mti2015$GPOEDA[mti2015$EDA>=5 & mti2015$EDA<=7]<-1
+mti2015$GPOEDA[mti2015$EDA>=8 & mti2015$EDA<=11]<-2
+mti2015$GPOEDA[mti2015$EDA>=12 & mti2015$EDA<=14]<-3
+mti2015$GPOEDA[mti2015$EDA>=15 & mti2015$EDA<=17]<-4
+table(mti2015$GPOEDA)
+
+mti2015$GPOEDA<-factor(mti2015$GPOEDA,levels = c(1,2,3,4),labels = c("Niñ@s","Pre-ado","Ado","Joven"))
+
+install.packages("questionr")
+require(questionr)
+tabla<-wtd.table(mti2015$GPOEDA, weights= mti2015$FAC_MTI)
+tabla
+
+install.packages("ggplot2")
+require(ggplot2)
+
+datos<-data.frame(tabla)
+colnames(datos)<-c("GrupoEdad","Numero")
+colores<-c("olivedrab2","green3","yellowgreen","lawngreen")
+grafica<-ggplot(data=datos, aes(x=GrupoEdad,y=Numero))+geom_bar(stat = "identity",fill=colores, colour=c("green","green", "green", "green"),width = 0.5)
+grafica
+help("geom_bar")
+
+
+(grafico<- grafica + theme (text = element_text(size=8)) + ggtitle ("Grupos de Edad de la Encuesta de trabajo infantil") + theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(2), 
+                                   vjust=2, 
+                                   face="bold", 
+                                   color="limegreen", 
+                                   lineheight=1.5)) + 
+  labs(x = "Grupo de Edad",y = "Población") + 
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="green", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="green", size=rel(1.5)))) 
+
