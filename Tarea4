@@ -1,0 +1,13 @@
+vx<-c(59,63,68,72,74,78,83)
+vy<-c(118,182,247,208,197,135,132)
+
+correlacion<-cor(vx,vy)
+
+stdx<-sd(vx)
+stdy<-sd(vy)
+
+mediax<-mean(vx)
+mediay<-mean(vy)
+
+beta1<-correlacion*(stdy/stdx)
+beta0<-mediay-beta1*mediax
