@@ -12,6 +12,7 @@ regresion1<-lm(Infant.Mortality~Fertility,data=base)
 ###modelo propuesto anteriormente
 nulo<-lm(Fertility~1,data=base) #variable dependiente con una constante (la que sea) para comparar
 #si el nulo es el mejor modelo no tiene caso hacer otro modelo
+#es el modelo más simple para contrastarlo con los otros
 summary(nulo)
 completo<-lm(Fertility~.,data=base) # el punto es como si pusieramos todas las variables independientes
 summary(completo)
