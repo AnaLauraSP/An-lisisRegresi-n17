@@ -1,0 +1,21 @@
+library(help = "datasets")
+
+
+base<- data.frame(stackloss)
+View(base)
+
+names(base)
+pairs(base)
+cor(base)
+
+nulo <- lm(stack.loss~1,data=base)
+completo <- lm(stack.loss~.,data=base)
+step(nulo,scope=list(lower=nulo,upper=completo),direction="forward")
+
+mod<-lm(Girth ~ Volume + Height, data = base)
+summary(mod)
+
+shapiro.test(rstudent(mod))
+require(lmtest)
+bptest(mod)
+dwtest(mod,alternative = "two.sided")
