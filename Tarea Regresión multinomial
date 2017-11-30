@@ -1,0 +1,68 @@
+require(foreign)
+base1<-read.spss("C:/Users/Ana Laura/Documents/Regresión/solorural.sav",to.data.frame = TRUE) #Modulo de trabajo infantil 2013
+
+#variable dependiente: persona para la que trabaja el niño, tres categorias: 1.familiar. 2.No familar. 3.Cuenta propia   T_PER .131  /borrar 4.No sabe
+#var independientes: 
+#1.Sexo: 1.hombre 2.Mujer     /SEX .23
+#2.Grupos de edad: 1.5 a 9    2.10 a 13     3.14 a 17  EDA1 .108
+#3.Sexo jefe del hogar:  1.hombre 2.Mujer  SEX_JEFE   .36
+#4.Tamaño hogar:   1.1 a 3      2.4 a 5       3.6 a 7    4.8 y más personas  TAM_HOG
+#5.Ocupación jefe del hogar:  1.Ocupado    2. Desocupado   OCU_JEFE
+#6.Tipo de apoyo recibido: 1.Beca para estudiar  2.Programa de gobierno  3.Ayuda familiar  4.Otro tipo de ayuda  5.No recibe  T_APO1
+
+#Categoría de referencia con quien trabaja "Es un familiar"
+
+
+base2<-subset(base1,base1$t_per!=4 & base1$t_per!=0)
+base3<-data.frame(base2$t_per,base2$sex,base2$eda1,base2$sex_jefe,base2$tam_hog,base2$ocu_jefe,base2$t_apo1)
+base4<-na.omit(base3)
+
+base4$base2.eda1<-factor(base4$base2.eda1)
+
+colnames(base4)<-c("t_per","sex","edad","sex_jefe","tam_hog","ocu_jefe","t_apo")
+
+#mod.logit<-glm(t_per~sex+edad+sex_jefe+tam_hog+ocu_jefe+t_apo, data=base4, family = "binomial")
+#summary(mod.logit)
+
+install.packages("nnet")
+require(nnet)
+modelo<-multinom(t_per~sex+edad+sex_jefe+tam_hog+ocu_jefe+t_apo, data=base4)
+summary(modelo)
+
+exp(coefficients(modelo))
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 1.19 veces mayor si es mujer con respecto a si es hombre 
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 3.3 veces mayor si es mujer con respecto a si es hombre
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 4.56 veces mayor si tiene entre 10 y 13 años con respecto a tener entre 5 y 9 años
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 0.91 veces mayor si tiene entre 10 y 13 años con respecto a tener entre 5 y 9 años
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 14.42 veces mayor si tiene entre 14 y 17 años con respecto a tener entre 5 y 9 años
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 1.42 veces mayor si tiene entre 14 y 17 años con respecto a tener entre 5 y 9 años
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 1.54 veces mayor si el jefe del hogar es mujer con respecto a si el jefe del hogar es hombre
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 2.31 veces mayor si el jefe del hogar es mujer con respecto a si el jefe del hogar es hombre
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 1.05 veces mayor si el tamaño del hogar es de 4 a 5 integrantes con respecto a si el tamaño del hogar es de 1 a 3 integrantes
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 0.39 veces mayor si el tamaño del hogar es de 4 a 5 integrantes con respecto a si el tamaño del hogar es de 1 a 3 integrantes 
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 1.21 veces mayor si el tamaño del hogar es de 6 a 7 integrantes con respecto a si el tamaño del hogar es de 1 a 3 integrantes
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 0.31 veces mayor si el tamaño del hogar es de 6 a 7 integrantes con respecto a si el tamaño del hogar es de 1 a 3 integrantes 
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 1.13 veces mayor si el tamaño del hogar es de 8 integrantes y más con respecto a si el tamaño del hogar es de 1 a 3 integrantes
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 0.12 veces mayor si el tamaño del hogar es de 8 integrantes y más con respecto a si el tamaño del hogar es de 1 a 3 integrantes 
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 2.03 veces mayor si el jefe del hogar está desocupado con respecto a si el jefe del hogar está ocupado
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 1.15 veces mayor si el jefe del hogar está desocupado con respecto a si el jefe del hogar está ocupado
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 2.33 veces mayor si se recibe apoyo de otro programa de gobierno con respecto a si se recibe una beca para estudiar
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 1.52 veces mayor si se recibe apoyo de otro programa de gobierno con respecto a si se recibe una beca para estudiar
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 2.87 veces mayor si se recibe ayuda de un familiar que vive en otro hogar con respecto a si se recibe una beca para estudiar
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 6.76 veces mayor si se recibe ayuda de un familiar que vive en otro hogar con respecto a si se recibe una beca para estudiar
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 2.13 veces mayor si se recibe otro tipo de ayuda con respecto a si se recibe una beca para estudiar
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 0.000067 veces mayor si se recibe otro tipo de ayuda con respecto a si se recibe una beca para estudiar
+
+#Trabajar con alguien que no es familiar frente a trabajar con un familiar es 2.43 veces mayor si no ha recibido ayuda con respecto a si se recibe una beca para estudiar
+#Trabajar solo o por su cuenta frente a trabajar con un familiar es 1.71 veces mayor si no ha recibido ayuda con respecto a si se recibe una beca para estudiar
